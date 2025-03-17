@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Monitoreo Ambiental</title>
+    <link rel="stylesheet" href="/css/stationView.css">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link active" data-section="monitoreos-activos">Monitoreos Activos</a></li>
+            <li><a href="/" class="nav-link" data-section="historico-monitoreos">Histórico de Monitoreos</a></li>
+            <li><a href="/mapMonitoring" class="nav-link" data-section="mapa-monitoreos">Mapa de Monitoreos</a></li>
+            <li><a href="/" class="nav-link" data-section="datos-almacenados">Datos Almacenados</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Estacion</h1>
+    </header>
+
+    <main>
+
+        <!-- Selector de fechas y horas -->
+        <div class="filters">
+            <label for="date">Selecciona una fecha:</label>
+            <input type="date" id="date" name="date">
+
+            <label for="time">Selecciona una hora inicio:</label>
+            <input type="time" id="timeInit" name="time">
+
+            <label for="time">Selecciona una hora fin:</label>
+            <input type="time" id="timeEnd" name="time">
+
+            <label for="station">Selecciona una estación:</label>
+            <select id="station" name="station">
+                <!-- Las opciones se llenarán con JavaScript -->
+            </select>
+
+            <button id="filterButton">Filtrar</button>
+        </div>
+
+        <!-- script para agregar automaticamente -->
+        <div id="estaciones">
+            <!-- Puedes agregar más estaciones aquí -->
+        </div>
+        <table>
+            <thead id="headTable">
+                <!-- script para agregar automaticamente el head -->
+            </thead>
+            <tbody id="bodyTable">
+                
+            </tbody>
+        </table>
+
+        <canvas id="myChart"></canvas>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 EnviroLink – (Enlace ambiental en tiempo real)</p>
+    </footer>
+    <script src="/js/stationView.js"></script>
+</body>
+</html>

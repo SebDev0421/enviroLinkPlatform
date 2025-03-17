@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Monitoreo Ambiental</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link active" data-section="monitoreos-activos">Monitoreos Activos</a></li>
+            <li><a href="/" class="nav-link" data-section="historico-monitoreos">Histórico de Monitoreos</a></li>
+            <li><a href="/mapMonitoring" class="nav-link" data-section="mapa-monitoreos">Mapa de Monitoreos</a></li>
+            <li><a href="#" class="nav-link" data-section="datos-almacenados">Datos Almacenados</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Sub Proyectos</h1>
+    </header>
+
+    <main>
+
+        <!-- script para agregar automaticamente -->
+        <div id="estaciones">
+            <!-- Puedes agregar más estaciones aquí -->
+        </div>
+
+        <button id="agregarEstacion">+</button>
+
+
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span id="closePopup" class="close">&times;</span>
+                <p>Crea un nuevo subproyecto</p>
+                <input type="text" id="nameField" placeholder="Nombre del subproyecto">
+                <input type="text" id="createdField" placeholder="Creado por">
+                <input type="text" id="numberIdField" placeholder="Numero de subproyecto">
+                <input type="text" id="latField" placeholder="lat">
+                <input type="text" id="lngField" placeholder="lng">
+                <button id="submitButton">Agregar</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 EnviroLink – (Enlace ambiental en tiempo real)</p>
+    </footer>
+    <script src="/js/subProjects.js"></script>
+</body>
+</html>

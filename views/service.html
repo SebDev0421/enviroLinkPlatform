@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Guides</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" href="/css/service.css">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+<script src="/dataset/features.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link" data-section="monitoreos-activos">Monitoreos Activos</a></li>
+            <li><a href="#" class="nav-link" data-section="historico-monitoreos">Histórico de Monitoreos</a></li>
+            <li><a href="/mapMonitoring" class="nav-link active" data-section="mapa-monitoreos">Mapa de Monitoreos</a></li>
+            <li><a href="#" class="nav-link" data-section="datos-almacenados">Datos Almacenados</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Dashboard de Monitoreo Ambiental</h1>
+    </header>
+
+    <div id="map">   
+    </div>
+<script>
+	// TO MAKE THE MAP APPEAR YOU MUST
+	// ADD YOUR ACCESS TOKEN FROM
+	// https://account.mapbox.com
+	mapboxgl.accessToken = 'pk.eyJ1IjoiY2lyY3VpdGxvZ2ljZGV2IiwiYSI6ImNtMGVuZ2JvbzBybngyaW9oNjNhaWI3ZmsifQ.gdlu6SOdT5eiGQb8ERXT6Q';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        projection: 'globe', // Display the map as a globe, since satellite-v9 defaults to Mercator
+        zoom: 7,
+        center: [-73.1036725055565,7.012816768584778]
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+    //map.scrollZoom.disable();
+
+    map.on('style.load', () => {
+        map.setFog({}); // Set the default atmosphere style
+    });
+
+    // The following values can be changed to control rotation speed:
+
+    // At low zooms, complete a revolution every two minutes.
+    const secondsPerRevolution = 240;
+    // Above zoom level 5, do not rotate.
+    const maxSpinZoom = 5;
+    // Rotate at intermediate speeds between zoom levels 3 and 5.
+    const slowSpinZoom = 3;
+
+    let userInteracting = false;
+    const spinEnabled = true;
+
+    function spinGlobe() {
+        const zoom = map.getZoom();
+        if (spinEnabled && !userInteracting && zoom < maxSpinZoom) {
+            let distancePerSecond = 360 / secondsPerRevolution;
+            if (zoom > slowSpinZoom) {
+                // Slow spinning at higher zooms
+                const zoomDif =
+                    (maxSpinZoom - zoom) / (maxSpinZoom - slowSpinZoom);
+                distancePerSecond *= zoomDif;
+            }
+            const center = map.getCenter();
+            center.lng -= distancePerSecond;
+            // Smoothly animate the map over one second.
+            // When this animation is complete, it calls a 'moveend' event.
+            map.easeTo({ center, duration: 1000, easing: (n) => n });
+        }
+    }
+
+    // Pause spinning on interaction
+    map.on('mousedown', () => {
+        userInteracting = true;
+    });
+    map.on('dragstart', () => {
+        userInteracting = true;
+    });
+
+    // When animation is complete, start spinning if there is no ongoing interaction
+    map.on('moveend', () => {
+        spinGlobe();
+    });
+
+    spinGlobe();
+
+    // add markers to map
+    for (const feature of geojson.features) {
+    
+    // code from step 7-1 will go here
+
+    // make a marker for each feature and add to the map
+    // create a HTML element for each feature
+    const el = document.createElement('div');
+    el.className = 'marker';
+
+    new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates).addTo(map);  // Replace this line with code from step 7-2
+
+    new mapboxgl.Marker(el)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML(
+            `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+    //code from step 8 will go here
+    }
+
+    
+
+
+
+
+</script>
+
+<footer>
+    <p>&copy; 2025 EnviroLink – (Enlace ambiental en tiempo real)</p>
+</footer>
+
+</body>
+</html>
