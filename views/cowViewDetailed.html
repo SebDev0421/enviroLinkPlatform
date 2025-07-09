@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Alimentación</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/insuagroLogo32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/insuagroLogo16x16.png" />
+  <link rel="stylesheet" href="/css/cowsView.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-left">
+    <img src="/images/insuagroLogoWY.jpg" alt="Logo" class="header-logo" />
+  </div>
+
+  <div class="header-center">
+<h1 class="logo">Sistema de Alimentacion Vacas</h1>
+  </div>
+
+  <div class="header-right">
+    <button class="config-button">⚙️ Configuración</button>
+    <button class="logout-button" onclick=logout()>🔒 Cerrar sesión</button>
+  </div>
+  </header>
+
+
+
+  <div class="main-container">
+    <nav class="sidebar">
+        <div class="finca-info">
+            <img src="/images/logoPlatform.jpg" alt="Logo de la finca" class="finca-logo" />
+            <h2 class="finca-nombre" id="farmName"></h2>
+        </div>
+      <ul>
+        <li><a href="dashboard">🐄 Mis Vacas</a></li>
+        <li><a href="gruposdeproduccion">👥 Grupos de Producción</a></li>
+        <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
+        <li><a href="#">🏡 Registro de la Finca</a></li>
+        <li><a href="Dispositivos">🧠 Controladores</a></li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+        <!-- Vista Detalle de Vaca -->
+        <div class="cow-detail-container">
+        <!-- Encabezado con nombre y botón de volver -->
+        <div class="detail-header">
+            <button class="back-button" onclick="history.back()">⬅️ Volver</button>
+            <h1 id="cowDetailName">Vaca #<span id="cowTag"></span></h1>
+        </div>
+
+        <!-- Sección superior: Foto + Datos Básicos -->
+        <div class="cow-info-section">
+            <div class="cow-photo-container">
+            <img id="cowDetailPhoto"  alt="Foto de la vaca" class="cow-photo">
+            </div>
+            <div class="cow-basic-data">
+            <p><strong>Nombre:</strong><span id="cowName"></span></p>    
+            <p><strong>Raza:</strong> <span id="cowBreed"></span></p>
+            <p><strong>Peso:</strong> <span id="cowWeight"></span> Kg</p>
+            <p><strong>Edad:</strong> <span id="cowAge"></span> años</p>
+            <p><strong>Grupo:</strong> <span id="cowGroupShow"></span></p>
+            <p><strong>Porciones por dia:</strong> <span id="cowPortionsPerDay"></span></p>
+            <p><strong>Porcion de concentrado:</strong> <span id="cowFood"></span> Kg</p>
+            </div>
+        </div>
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button class="action-btn edit-btn" onclick="openEditCowModal()">✏️ Editar</button>
+            <button class="action-btn delete-btn" onclick="deleteCow()">🗑️ Eliminar</button>
+        </div>
+
+        <!-- modal para editar la informacion de la vaca  -->
+        <div id="editCowModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeEditCowModal()">&times;</span>
+                <h2>Editar Información de la Vaca</h2>
+                <form id="editCowForm">
+                    
+                    <label for="editCowTag">Tag:</label>
+                    <input type="number" step="0.1" id="editCowTag" required>
+                    <label for="editCowCountry">Country Tag:</label>
+                    <input type="number" id="editCowCountry" required>
+
+                    <label for="hasGroup">¿Pertenece a un grupo de producción?</label>
+                    <select id="hasGroup" onchange="togglePortionWeight()" required>
+                        <option value="yes">Sí</option>
+                        <option value="no">No</option>
+                    </select>
+                    <div id="groupContainer" style="display: block;">
+                        <label for="cowGroup">Grupo de Producción:</label>
+                        <select id="cowGroup">
+                        <!--  Aquí se cargarán los grupos de producción dinámicamente  -->
+                        </select>
+                    </div>
+
+                    <!-- Campo dinámico para el peso (oculto inicialmente) -->
+                    <div id="portionWeightContainer" style="display: none;">
+                        <label for="portionWeight">Peso de la porción (kg):</label>
+                        <input type="number" id="editPortionWeight" step="0.1" min="0">
+                    </div>
+
+                    <label for="editCowPortionsPerDay">Porciones por dia:</label>
+                    <input type="text" id="editCowPortionsPerDay" required>
+
+                    <label for="editCowWeight">Peso (Kg):</label>
+                    <input type="number" id="editCowWeight" min="0" step="0.1" required>
+
+                    <button type="submit" class="submit-button">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- Pestañas para organizar la info -->
+        <div class="tabs">
+            <button id="tab-production" class="tab-button active" onclick="openTab('production')">Producción</button>
+            <button id="tab-feeding" class="tab-button " onclick="openTab('feeding')">Alimentación</button>
+        </div>
+
+        
+        <!-- Contenido de pestañas -->
+        <div id="production" class="tab-content" style="display: block;">
+            <!-- Gráfico de producción (usaremos Chart.js) -->
+            <div class="chart-container">
+            <canvas id="productionChart"></canvas>
+            </div>
+            
+            <!-- Formulario para registrar nueva producción -->
+            <div class="add-production-form">
+            <h3>Registrar Producción Diaria</h3>
+            <input type="number" id="milkProduction" placeholder="Litros producidos hoy" step="0.1" min="0">
+            <button onclick="addProduction()">➕ Agregar</button>
+            </div>
+        </div>
+
+        <div id="feeding" class="tab-content">
+            <!-- Log de alimentación -->
+            <div class="feeding-log">
+            <h3>Historial de Alimentación</h3>
+            <ul id="feedingLogList">
+                <!-- Ejemplo de item dinámico -->
+            </ul>
+            </div>
+        </div>
+        </div>  
+    </main>
+</div>
+
+<script src="/js/controllerCow.js"></script>
+
+</body>
+</html>

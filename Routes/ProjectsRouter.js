@@ -4,7 +4,11 @@ const Projects = require('../Models/Projects')
 const SubProjects = require('../Models/SubProjects')
 const Stations = require('../Models/Stations')
 const Machines = require('../Models/Machines')
+
+
 const mongoose = require('mongoose')
+
+
 
 const express = require('express'),
       app = express.Router()
@@ -34,13 +38,9 @@ app.put('/addSubProject',async(req,res)=>{
     console.log(numberId)
     await Projects.findOne({numberId:numberProject}).then(async(obj)=>{
         console.log(obj)
-        if(obj == null){
-            const subProjects =  new SubProjects({create,name,numberProject,numberId,location,createDate})
-            await subProjects.save()
-            await res.json({status:'subproject was create'})
-        }else{
-            res.json({status:'subproject already exist'})
-        }
+        const subProjects =  new SubProjects({create,name,numberProject,numberId,location,createDate})
+        await subProjects.save()
+        await res.json({status:'subproject was create'})
     })
 })
 

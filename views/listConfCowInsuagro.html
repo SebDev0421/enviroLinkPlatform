@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Alimentación</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/insuagroLogo32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/insuagroLogo16x16.png" />
+  <link rel="stylesheet" href="/css/cowsView.css" />
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-left">
+    <img src="/images/insuagroLogoWY.jpg" alt="Logo" class="header-logo" />
+  </div>
+
+  <div class="header-center">
+<h1 class="logo">Sistema de Alimentacion Vacas</h1>
+  </div>
+
+  <div class="header-right">
+    <button class="config-button">⚙️ Configuración</button>
+    <button class="logout-button">🔒 Cerrar sesión</button>
+  </div>
+  </header>
+
+
+
+  <div class="main-container">
+    <nav class="sidebar">
+        <div class="finca-info">
+            <img src="/images/logoPlatform.jpg" alt="Logo de la finca" class="finca-logo" />
+            <h2 class="finca-nombre">Finca Santa María</h2>
+        </div>
+      <ul>
+        <li><a href="dashboard">🐄 Mis Vacas</a></li>
+        <li><a href="gruposdeproduccion">👥 Grupos de Producción</a></li>
+        <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
+        <li><a href="#">🏡 Registro de la Finca</a></li>
+        <li><a href="Dispositivos">🧠 Controladores</a></li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <section class="busqueda-dinamica">
+        <h2>🔍 Buscar Vacas</h2>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Escribe el nombre o código de la vaca..."
+          class="search-box"
+        />
+        <ul id="cowList" class="cow-list">
+          <!-- Aquí se generarán dinámicamente las vacas -->
+        </ul>
+      </section>
+    </main>
+    
+</div>
+
+
+<script src="/js/cowsInformation.js"></script>
+
+</body>
+</html>

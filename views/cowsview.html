@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Alimentación</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/insuagroLogo32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/insuagroLogo16x16.png" />
+  <link rel="stylesheet" href="/css/cowsView.css" />
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-left">
+    <img src="/images/insuagroLogoWY.jpg" alt="Logo" class="header-logo" />
+  </div>
+
+  <div class="header-center">
+<h1 class="logo">Sistema de Alimentacion Vacas</h1>
+  </div>
+
+  <div class="header-right">
+    <button class="config-button">⚙️ Configuración</button>
+    <button class="logout-button" onclick=logout()>🔒 Cerrar sesión</button>
+  </div>
+  </header>
+
+
+
+  <div class="main-container">
+    <nav class="sidebar">
+        <div class="finca-info">
+            <img src="/images/logoPlatform.jpg" alt="Logo de la finca" class="finca-logo" />
+            <h2 class="finca-nombre" id="farmName"></h2>
+        </div>
+      <ul>
+        <li><a href="dashboard">🐄 Mis Vacas</a></li>
+        <li><a href="gruposdeproduccion">👥 Grupos de Producción</a></li>
+        <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
+        <li><a href="#">🏡 Registro de la Finca</a></li>
+        <li><a href="Dispositivos">🧠 Controladores</a></li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <div class="welcome-message">
+        <h1>¡Hola, <span id="userName"></span>!</h1>
+        <h2>Bienvenido al sistema</h2>
+        <div id="cowsCards" class="cows-cards-container"></div>
+        </div>
+
+        <!-- button add cow to inventary -->
+        <button class="fab-button" onclick="openModal()">
+          <img src="/images/add-cow-icon.png" alt="Agregar vaca" class="fab-icon" style="width: 35px;height: 35px;">
+        </button>
+
+        <!-- Modal (pop-up) -->
+        <div id="addCowModal" class="modal">
+          <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>Agregar Nueva Vaca</h2>
+            <form id="cowForm">
+              
+              <label for="cowId">Nombre de la vaca:</label>
+              <input type="text" id="cowName" required>
+
+              <label for="cowId">Tag de la Vaca:</label>
+              <input type="number" id="cowTag" required>
+
+              <label for="cowId">Country tag:</label>
+              <input type="number" id="cowCountry" required>
+              
+              <label for="cowBreed">Raza:</label>
+              <select id="cowBreed" onchange="toggleBreedInput()" required>
+                <option value="Holstein">Holstein</option>
+                <option value="Pardo Suizo">Pardo Suizo</option>
+                <option value="Ayrshire">Ayrshire</option>
+                <option value="Jersey">Jersey</option>
+                <option value="Hartón del Valle">Hartón del Valle</option>
+                <option value="Otra">Otra raza</option>
+              </select>
+              
+              <div id="breed-other" style="display: none;">
+                <label id="otherBreed" for="otherBreed">Especifique otra raza:</label>
+                <input type="text" id="otherBreed">
+              </div> 
+
+              <label for="cowBirthDate">Fecha de Nacimiento:</label>
+              <input type="date" id="cowBirthDate" required>
+
+              <label for="cowWeight">Peso (kg):</label>
+              <input type="number" id="cowWeight" required>
+
+              <label for="hasGroup">¿Pertenece a un grupo de producción?</label>
+              <select id="hasGroup" onchange="togglePortionWeight()" required>
+                <option value="yes">Sí</option>
+                <option value="no">No</option>
+              </select>
+              <div id="groupContainer" style="display: block;">
+                <label for="cowGroup">Grupo de Producción:</label>
+                <select id="cowGroup">
+                  <!--  Aquí se cargarán los grupos de producción dinámicamente  -->
+                </select>
+              </div>
+
+              <!-- Campo dinámico para el peso (oculto inicialmente) -->
+              <div id="portionWeightContainer" style="display: none;">
+                <label for="portionWeight">Peso de la porción (kg):</label>
+                <input type="number" id="portionWeight" step="0.1" min="0">
+              </div>
+
+              <label for ="portionsPerDay">Porciones por día:</label>
+              <input type="number" id="portionsPerDay" min="1" value="1" required>
+
+              <label for="cowPhoto">Foto de la vaca:</label>
+              <div class="photo-options">
+                <!-- Input para subir archivo -->
+                <input type="file" id="cowPhoto" accept="image/*" capture="environment" style="display: none;">
+                <!-- Botón para abrir la cámara -->
+                <button type="button" class="photo-button" onclick="document.getElementById('cowPhoto').click()">📸 Tomar Foto</button>
+                <!-- Vista previa de la imagen -->
+                <img id="photoPreview" src="#" alt="Vista previa de la foto" style="display: none; max-width: 100px; max-height: 100px; margin-top: 10px;">
+              </div>
+
+              <button type="button" onclick="document.getElementById('photoPreview').style.display = 'none'; document.getElementById('cowPhoto').value = '';">🗑️ Eliminar</button>
+
+              <label for="cowNotes">Notas:</label>
+              <textarea id="cowNotes"></textarea>
+
+
+              
+              <button type="submit" class="submit-button">Guardar</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Modal for confirmation -->
+
+
+      </div>
+      </main>
+</div>
+
+<script src="/js/cowsView.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grupos de Producción</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/insuagroLogo32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/insuagroLogo16x16.png" />
+  <link rel="stylesheet" href="/css/cowsView.css" />
+  <style>
+    /* Estilos adicionales específicos para grupos */
+    .groups-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .group-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      position: relative;
+    }
+    
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .group-range {
+      background: #f0f7f0;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    
+    .group-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .action-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .edit-btn {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    
+    .delete-btn {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+    
+    .add-group-btn {
+      background: #2e7d32;
+      color: white;
+      padding: 10px 15px;
+      margin: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-left">
+      <img src="/images/insuagroLogoWY.jpg" alt="Logo" class="header-logo" />
+    </div>
+
+    <div class="header-center">
+      <h1 class="logo">Grupos de Producción</h1>
+    </div>
+
+    <div class="header-right">
+      <button class="config-button">⚙️ Configuración</button>
+      <button class="logout-button" onclick="logout()">🔒 Cerrar sesión</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <nav class="sidebar">
+      <div class="finca-info">
+        <img src="/images/logoPlatform.jpg" alt="Logo de la finca" class="finca-logo" />
+        <h2 class="finca-nombre" id="farmName"></h2>
+      </div>
+      <ul>
+        <li><a href="dashboard">🐄 Mis Vacas</a></li>
+        <li class="gruposdeproduccion"><a href="#">👥 Grupos de Producción</a></li>
+        <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
+        <li><a href="#">🏡 Registro de la Finca</a></li>
+        <li><a href="Dispositivos">🧠 Controladores</a></li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <div class="welcome-message">
+        <h1>Grupos de Producción</h1>
+        <p>Administra los grupos de producción de tu finca</p>
+        
+        <button class="add-group-btn" onclick="openGroupModal()">+ Crear Nuevo Grupo</button>
+        
+        <div id="groups-container" class="groups-container" id="groupsContainer">
+          <!-- Grupos se cargarán aquí dinámicamente -->
+          
+        </div>
+      </div>
+
+      <!-- Modal para crear/editar grupo -->
+      <div id="groupModal" class="modal">
+        <div class="modal-content">
+          <span class="close-button" onclick="closeGroupModal()">&times;</span>
+          <h2 id="modalGroupTitle">Nuevo Grupo de Producción</h2>
+          <form id="groupForm">
+            <label for="groupName">Nombre del Grupo:</label>
+            <input type="text" id="groupName" required>
+            
+            <label for="minProduction">Producción Mínima (L/día):</label>
+            <input type="number" id="minProduction" min="0" step="0.1" required>
+            
+            <label for="maxProduction">Producción Máxima (L/día):</label>
+            <input type="number" id="maxProduction" min="0" step="0.1" required>
+
+            <label for="maxProduction">Porcion (Kg):</label>
+            <input type="number" id="portion" min="0" step="0.1" required>
+            
+            <button type="submit" class="submit-button">Guardar Grupo</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- manejo de modales -->
+   <script src="/js/sessionController.js"></script>
+  <script src="/js/groupsController.js"></script>
+  <script>
+    // Funciones para manejar los modales
+    function openGroupModal() {
+      document.getElementById('groupModal').style.display = 'block';
+      document.getElementById('modalGroupTitle').textContent = 'Nuevo Grupo de Producción';
+      document.getElementById('groupForm').reset();
+    }
+    
+    function closeGroupModal() {
+      document.getElementById('groupModal').style.display = 'none';
+    }
+    
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+      const modal = document.getElementById('groupModal');
+      if (event.target == modal) {
+        closeGroupModal();
+      }
+    }
+    
+    //add group productive
+    async function addGroupProductive(){
+    const name = document.getElementById("groupName").value;
+    const minProduction = document.getElementById("minProduction").value;
+    const maxProduction = document.getElementById("maxProduction").value;
+    const portion = document.getElementById("portion").value;   
+    const farmId = localStorage.getItem("idFarm");
+    // fetch to add group
+    await fetch("/CowFood/API/Cows/addProductionGroup",{
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name,
+                farmId,
+                minProduction,
+                maxProduction,
+                food: portion // Asignar la porción al campo food
+            })
+        }).then((res=>res.json()))
+        .then((res)=>{
+            console.log(res)
+            if(res.status === 200){
+                alert("Grupo de producción agregado exitosamente.");
+                getAPiGroupsProductive(); // Refresh the groups list
+            }else{
+            alert("Error al agregar el grupo de producción: " + res.msg);
+            }
+        })
+        .catch((err)=>{
+            console.log(err)
+            alert("Error al agregar el grupo de producción.");
+        })
+        document.getElementById("nameGroup").value = "";
+        document.getElementById("minProduction").value = "";
+        document.getElementById("maxProduction").value = "";
+        document.getElementById("portion").value = "";
+    }   
+
+
+    document.getElementById('groupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Aquí iría la lógica para guardar el grupo
+      //addGroupProductive();
+
+      if(minProduction > maxProduction){
+        alert("La producción mínima no puede ser mayor que la máxima.");
+        return;
+      }
+
+      console.log("Peticion para agregar grupo de producción");
+      addGroupProductive();
+      closeGroupModal();
+      // Actualizar la lista de grupos
+    });
+    // Simulación de datos (en un caso real, esto vendría de tu API)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Aquí podrías cargar los grupos existentes desde tu backend
+      document.getElementById('farmName').textContent = 'Finca La Esperanza';
+    });
+  </script>
+</body>
+</html>

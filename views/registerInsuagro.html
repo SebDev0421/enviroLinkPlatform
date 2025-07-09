@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrarse - Sistema de Vacas</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/insuagroLogo32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/insuagroLogo16x16.png" />
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <form class="auth-form">
+      <img src="/images/insuagroLogoWY.jpg" alt="Insuagro Logo" class="logo" style="width: 200px;height: 200px;border-radius: 100px;" />
+      <h2>Registro</h2>
+      <input type="text" id="name" placeholder="Nombre completo" required />
+      <input type="email" id="user" placeholder="Correo electrónico" required />
+      <input type="password" id="pass" placeholder="Contraseña" required />
+      <input type="password" id="passConfirm" placeholder="Confirmar contraseña" required />
+      <input type="text" id="idFarm" placeholder="id finca" required />
+      <button onclick="register()">Crear cuenta</button>
+      <p class="link-text">¿Ya tienes cuenta? <a href="login">Inicia sesión</a></p>
+    </form>
+  </div>
+  <script src="/js/LoginInsuagro.js"></script>
+</body>
+</html>

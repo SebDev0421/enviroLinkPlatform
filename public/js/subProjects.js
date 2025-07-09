@@ -80,8 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log(obj)
                 createCard(obj.name,obj.create,obj.createDate,obj.numberId,obj.location[0],obj.location[1])
             })
-            
-
         })
     }
 
