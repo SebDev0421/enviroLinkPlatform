@@ -45,12 +45,12 @@ app.put('/addSubProject',async(req,res)=>{
 })
 
 app.put('/addStations',async(req,res)=>{
-    const {create,name,numberSubProject,numberId,location,createDate,machines} = req.body
+    const {create,name,numberSubProject,numberId,serialController,location,createDate} = req.body
     console.log(numberId)
     await Stations.findOne({numberId:numberId}).then(async(obj)=>{
         console.log(obj)
         if(obj == null){
-            const stations =  new Stations({create,name,numberSubProject,numberId,location,createDate,machines})
+            const stations =  new Stations({create,name,numberSubProject,numberId,serialController,location,createDate})
             await stations.save()
             await res.json({status:'station was create'})
         }else{
@@ -107,6 +107,27 @@ app.put('/getStationData',async(req,res)=>{
     })
     
 })
+
+app.post('/uploadMachinesToStation',async(req,res)=>{
+    const {stationId,serials,model,types} = req.body
+    console.log("stationId",stationId)
+    console.log("serial",serials)
+    console.log("model",model)
+    console.log("types",types)
+    //update station by stationId
+    if(!stationId) return res.status(400).json({msg:"No station id provided"})
+    const updatedStation = await Stations.findOneAndUpdate(
+        {_id:stationId},
+        {serials:serials,model:model,types:types},
+        {new:true}
+    )
+    if(!updatedStation) return res.status(404).json({msg:"Station not found"})
+    console.log("updatedStation",updatedStation)
+    res.json({msg:updatedStation})
+    //return updated station
+
+})
+
 
 
 

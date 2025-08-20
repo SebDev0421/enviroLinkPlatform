@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2lyY3VpdGxvZ2ljZGV2IiwiYSI6ImNtMGVuZ2JvbzBybngyaW9oNjNhaWI3ZmsifQ.gdlu6SOdT5eiGQb8ERXT6Q';
         const map = new mapboxgl.Map({
             container: 'map'+idProject,
-            style: 'mapbox://styles/mapbox/streets-v9',
+            style: 'mapbox://styles/mapbox/streets-v12',
             zoom: 12,
             center: [parseFloat(lat),parseFloat(lng)],
             interactive: false
@@ -78,7 +78,21 @@ document.addEventListener('DOMContentLoaded', function () {
         .then((res)=>{
             res.stations.map((obj)=>{
                 console.log(obj)
-                createCard(obj.name,obj.create,obj.createDate,obj.numberId,obj.location[0],obj.location[1])
+                //convert date to colombia format
+                const date = new Date(obj.createDate);
+                const formatter = new Intl.DateTimeFormat("es-CO", {
+                    timeZone: "America/Bogota",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false
+                });
+                const formattedDate = formatter.format(date);
+
+                createCard(obj.name,obj.create,formattedDate,obj.numberId,obj.location[0],obj.location[1])
             })
             
 
@@ -89,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     //read api for get projects
-    async function addAPiprojects(create,name,numberId,lat,lng,createDate){
+    async function addAPiprojects(create,name,numberId,serialController,lat,lng,createDate){
         await fetch("/Envirolink/API/Projects/addStations",{
             method:'PUT',
             headers: {
@@ -100,9 +114,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 name: name,
                 numberSubProject: projectId,
                 numberId: numberId,
+                serialController:serialController,
                 location: [lat,lng],
                 createDate: createDate,
-                machines:['0406905182','42C73915-375','43C61340-330','48C67501-357']
+                
             })
         }).then((res=>res.json()))
         .then((res)=>{
@@ -138,13 +153,36 @@ document.addEventListener('DOMContentLoaded', function () {
         const nameInput = nameField.value;
         const createdInput = createdField.value;
         const numberIdInput = numberIdField.value;
+        const serialControllerInput = serialControllerField.value;
         const latInput = latField.value;
         const lngInput = lngField.value;
-        if (nameInput && createdInput && numberIdInput && latInput && lngInput){
+        if (nameInput && createdInput && numberIdInput && serialControllerInput && latInput && lngInput){
             //conect api
             const now = new Date();
-            const createdDateInput = now.toISOString()
-            addAPiprojects(createdInput,nameInput,numberIdInput,latInput,lngInput,createdDateInput)
+
+            // Usamos Intl.DateTimeFormat para formatear en zona Colombia
+            const formatter = new Intl.DateTimeFormat("sv-SE", {
+            timeZone: "America/Bogota",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+            });
+
+            // Obtenemos las partes de fecha/hora
+            const parts = formatter.formatToParts(now);
+            const getPart = type => parts.find(p => p.type === type).value;
+
+            const colombiaDateTime = `${getPart("year")}-${getPart("month")}-${getPart("day")}T${getPart("hour")}:${getPart("minute")}:${getPart("second")}`;
+
+            // Y le añadimos la zona horaria de Colombia
+            const createdDateInput = colombiaDateTime + ".000-05:00";
+
+            console.log(createdDateInput);
+            addAPiprojects(createdInput,nameInput,numberIdInput,serialControllerInput,latInput,lngInput,createdDateInput)
             //alert("You entered: " + nameInput);
             popup.style.display = "none"; // Close the popup after submission
         } else {

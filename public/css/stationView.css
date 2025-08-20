@@ -7,7 +7,7 @@
 
 /* Barra de navegación */
 nav {
-    background-color: #4CAF50;
+    background: rgba(15, 23, 42, 0.85);
     padding: 10px 0;
 }
 
@@ -31,11 +31,11 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #45a049;
+    background: rgba(15, 23, 42, 0.85);
 }
 
 nav ul li a.active {
-    background-color: #388e3c;
+    background: rgba(9, 15, 27, 0.85);
 }
 
 body {
@@ -46,7 +46,7 @@ body {
 }
 
 header {
-    background-color: #4CAF50;
+    background: rgba(15, 23, 42, 0.85);
     color: white;
     padding: 20px 0;
     text-align: center;

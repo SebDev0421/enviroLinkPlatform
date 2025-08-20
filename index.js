@@ -24,6 +24,10 @@ const io = socketIo(server, {
 
 const morgan = require('morgan')
 
+const DevicesRouter = require('./Routes/DevicesEnvirolinkRouter')
+
+const UsersEnvirolinkRouter = require('./Routes/UsersEnvirolinkRouter')
+
 const ProjectsRouter = require('./Routes/ProjectsRouter')
 const ProjectsRouterCows = require('./Routes/cowsRouter')
 const ProjectsRouterDevices = require('./Routes/DevicesCowRouter')
@@ -48,6 +52,10 @@ app.use((req, res, next) => {
 app.use(express.json())
 app.use('/Envirolink/API/Projects/',ProjectsRouter)
 
+app.use('/Envirolink/API/Devices/',DevicesRouter)
+
+app.use('/Envirolink/API/Users/',UsersEnvirolinkRouter)
+
 app.use('/CowFood/API/Cows/',ProjectsRouterCows)
 
 app.use('/CowFood/API/Devices/',ProjectsRouterDevices)
@@ -63,8 +71,17 @@ const staticPath = path.join(__dirname,'public/html/')
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
+app.get('/Dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+
+app.get('/loginEnvirolink', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'loginEnvirolink.html'));
+});
+
+app.get('/registerEnvirolink', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'registerEnvirolink.html'));
 });
 
 app.get('/subProyecto', (req, res) => {
@@ -79,9 +96,15 @@ app.get('/estacion', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'stationView.html'));
 });
 
+app.get('/machineView', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'machineEnvirolinkView.html'));
+});
+
 app.get('/mapMonitoring',(req,res)=>{
     res.sendFile(path.join(__dirname, 'views', 'service.html'));
 })
+
+
 
 
 

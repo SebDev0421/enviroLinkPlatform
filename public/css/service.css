@@ -8,7 +8,7 @@
 
 /* Barra de navegación */
 nav {
-    background-color: #4CAF50;
+    background: rgba(15, 23, 42, 0.85);
     padding: 10px 0;
 }
 
@@ -47,7 +47,7 @@ body {
 }
 
 header {
-    background-color: #4CAF50;
+    background: rgba(15, 23, 42, 0.85);
     color: white;
     padding: 20px 0;
     text-align: center;

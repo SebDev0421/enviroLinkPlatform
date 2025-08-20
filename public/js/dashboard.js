@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    //get if active session
+    const activeSession = localStorage.getItem('sessionEnvirolink');
+    if (!activeSession) {
+        window.location.href = '/loginEnvirolink';
+    }
+
     const estacionesContainer = document.getElementById('estaciones');
     const agregarEstacionBtn = document.getElementById('agregarEstacion');
     const navLinks = document.querySelectorAll('.nav-link');

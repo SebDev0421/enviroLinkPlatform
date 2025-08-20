@@ -35,12 +35,16 @@
         <div id="popup" class="popup">
             <div class="popup-content">
                 <span id="closePopup" class="close">&times;</span>
-                <p>Crea un nuevo estacion</p>
+                <p class="subtitle">Llena los datos para registrar una nueva estación</p>
+                <h2>Crea un nuevo estacion</h2>
                 <input type="text" id="nameField" placeholder="Nombre del estacion">
                 <input type="text" id="createdField" placeholder="Creado por">
                 <input type="text" id="numberIdField" placeholder="Numero de estacion">
-                <input type="text" id="latField" placeholder="lat">
-                <input type="text" id="lngField" placeholder="lng">
+                <input type="text" id="serialControllerField" placeholder="Serial trasmisor">
+                <div class="coords">
+                    <input type="text" id="latField" placeholder="Latitud">
+                    <input type="text" id="lngField" placeholder="Longitud">
+                </div>
                 <button id="submitButton">Crear</button>
             </div>
         </div>
