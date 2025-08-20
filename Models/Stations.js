@@ -1,7 +1,5 @@
 'use strict'
 
-const { act } = require('react')
-
 const mongoose = require('mongoose'),
       Schema = mongoose.Schema,
       StationsSchema = new Schema({
