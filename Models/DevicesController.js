@@ -6,6 +6,8 @@ const mongoose = require('mongoose'),
           idController: String,
           timeMotor1:{type:Number,default:1.0},
           timeMotor2:{type:Number,default:1.0},
+          timeMotor1Off:{type:Number,default:1.0},
+          timeMotor2Off:{type:Number,default:1.0},
           pulsesKg1:{type:Number,default:5},
           pulsesKg2:{type:Number,default:5},
           farmId:{type:String,default:"insuagro"}

@@ -40,14 +40,16 @@ async function getAPiControllers(){
         let html = ""
         res.devices.map(controller => {
             html += `
-            <div class="card" style="width: 18rem;" onclick="openModal(${controller.idController},${controller.timeMotor1},${controller.pulsesKg1},${controller.timeMotor2},${controller.pulsesKg2})">
+            <div class="card" style="width: 18rem;" onclick="openModal(${controller.idController},${controller.timeMotor1},${controller.timeMotor1Off},${controller.pulsesKg1},${controller.timeMotor2},${controller.timeMotor2Off},${controller.pulsesKg2})">
                 <img src="/images/device.png" style="width: 90%;height: 200px;" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Dispositivo de control</h5>
                     <p class="card-text">S/N controlador: ${controller.idController}</p>
-                    <p class="card-text">Tiempo de Motor salida 1: ${controller.timeMotor1} Seg</p>
+                    <p class="card-text">Tiempo Encendido de Motor salida 1: ${controller.timeMotor1} Seg</p>
+                    <p class="card-text">Tiempo apagado de Motor salida 1: ${controller.timeMotor1Off} Seg</p>
                     <p class="card-text">Pulsos por Kg salida 1: ${controller.pulsesKg1}</p>
-                    <p class="card-text">Tiempo de Motor salida 2: ${controller.timeMotor2} Seg</p>
+                    <p class="card-text">Tiempo Encendido de Motor salida 2: ${controller.timeMotor2} Seg</p>
+                    <p class="card-text">Tiempo apagado de Motor salida 2: ${controller.timeMotor2Off} Seg</p>
                     <p class="card-text">Pulsos por Kg salida 2: ${controller.pulsesKg2}</p>
                     
                 </div>
@@ -72,12 +74,14 @@ function logout(){
     } 
 }
 
-function openModal(serialController, timeMotor1, pulsesKg1, timeMotor2, pulsesKg2) {
+function openModal(serialController, timeMotor1,timeMotor1Off, pulsesKg1, timeMotor2,timeMotor2Off, pulsesKg2) {
     document.getElementById("modifyControllerModal").style.display = "block";
     document.getElementById("controllerSerial").textContent = serialController;
     document.getElementById("timeMotor1").value = timeMotor1;
+    document.getElementById("timeMotor1Off").value = timeMotor1Off;
     document.getElementById("pulsesKg1").value = pulsesKg1;
     document.getElementById("timeMotor2").value = timeMotor2;
+    document.getElementById("timeMotor2Off").value = timeMotor2Off;
     document.getElementById("pulsesKg2").value = pulsesKg2;
 }
 function closeModal() {
@@ -88,15 +92,19 @@ document.getElementById("modifyControllerForm").addEventListener("submit", async
     event.preventDefault();
     const serialController = document.getElementById("controllerSerial").textContent;
     const timeMotor1 = document.getElementById("timeMotor1").value;
+    const timeMotor1Off = document.getElementById("timeMotor1Off").value;
     const pulsesKg1 = document.getElementById("pulsesKg1").value;
     const timeMotor2 = document.getElementById("timeMotor2").value;
+    const timeMotor2Off = document.getElementById("timeMotor2Off").value;
     const pulsesKg2 = document.getElementById("pulsesKg2").value;
     const data = {
         idController: serialController,
         farmId: localStorage.getItem("idFarm"),
         timeMotor1: parseFloat(timeMotor1),
+        timeMotor1Off: parseFloat(timeMotor1Off),
         pulsesKg1: parseFloat(pulsesKg1),
         timeMotor2: parseFloat(timeMotor2),
+        timeMotor2Off: parseFloat(timeMotor2Off),
         pulsesKg2: parseFloat(pulsesKg2)
     };
     try {

@@ -50,6 +50,19 @@ document.addEventListener('DOMContentLoaded', function () {
         el.className = 'marker';
         new mapboxgl.Marker(el).setLngLat([parseFloat(lat),parseFloat(lng)]).addTo(map);
         // Agregar la tarjeta al contenedor
+
+        /* // Inicializar mapa
+                mapboxgl.accessToken = 'pk.eyJ1IjoiY2lyY3VpdGxvZ2ljZGV2IiwiYSI6ImNtMGVuZ2JvbzBybngyaW9oNjNhaWI3ZmsifQ.gdlu6SOdT5eiGQb8ERXT6Q';
+                const map = new mapboxgl.Map({
+                  container: 'map',
+                  style: 'mapbox://styles/mapbox/streets-v12',
+                  center: [data.location[0], data.location[1]], // Bogotá
+                  zoom: 15
+                });
+
+                const el = document.createElement('div');
+                el.className = 'marker';
+                new mapboxgl.Marker(el).setLngLat([parseFloat(data.location[0]),parseFloat(data.location[1])]).addTo(map); */
         
     }
 

@@ -48,10 +48,10 @@ app.put('/modifyDeviceFarm',async(req,res)=>{
 
 app.put('/calibrateDevice',async(req,res)=>{
     // modify time and pulse of the device
-    const {idController,farmId,timeMotor1,timeMotor2,pulsesKg1,pulsesKg2} = req.body
+    const {idController,farmId,timeMotor1,timeMotor1Off,timeMotor2,timeMotor2Off,pulsesKg1,pulsesKg2} = req.body
     console.log(idController,farmId)
     console.log(req.body)
-    await DevicesController.updateOne({idController:idController,farmId:farmId},{$set:{timeMotor1:parseFloat(timeMotor1),timeMotor2:parseFloat(timeMotor2),pulsesKg1:pulsesKg1,pulsesKg2:pulsesKg2}})
+    await DevicesController.updateOne({idController:idController,farmId:farmId},{$set:{timeMotor1:parseFloat(timeMotor1),timeMotor1Off:parseFloat(timeMotor1Off),timeMotor2:parseFloat(timeMotor2),timeMotor2Off:parseFloat(timeMotor2Off),pulsesKg1:pulsesKg1,pulsesKg2:pulsesKg2}})
     res.json({msg:"el controlador fue modificado correctamente",status:200})
 
     //send socket message to the device
