@@ -6,6 +6,7 @@ const mongoose = require('mongoose'),
           name:{type:String},
           email:{type:String},
           password:{type:String},
+          Permissions:{type:String,default:"user"},//user,admin
           idFarm:{type:String},
           photo:{type:String,default:"/imagesUsers/default.png"}
       },{

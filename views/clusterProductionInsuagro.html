@@ -150,6 +150,10 @@
     let editingGroupId = null; // Variable para almacenar el ID del grupo que se está editando
 
     function openGroupModal() {
+      if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+      }
       document.getElementById('groupModal').style.display = 'block';
       document.getElementById('modalGroupTitle').textContent = 'Nuevo Grupo de Producción';
       document.getElementById('groupForm').reset();
@@ -157,7 +161,10 @@
 
     function openGroupModalEdit(idGroup, name, minProduction, maxProduction, portion) {
 
-
+      if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+      }
       document.getElementById('groupModal').style.display = 'block';
       document.getElementById('modalGroupTitle').textContent = 'Editar Grupo de Producción';
       document.getElementById('groupForm').reset();
@@ -173,6 +180,10 @@
     }
 
     async function deleteGroup(idGroup){
+      if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+      }
       console.log("Eliminar grupo de producción:"+ idGroup);
       // Aquí iría la lógica para eliminar el grupo
       await fetch("/CowFood/API/Cows/deleteProductionGroup",{
@@ -214,6 +225,7 @@
     
     //add group productive
     async function addGroupProductive(){
+    
     const name = document.getElementById("groupName").value;
     const minProduction = document.getElementById("minProduction").value;
     const maxProduction = document.getElementById("maxProduction").value;
@@ -253,6 +265,10 @@
     }
 
     async function editGroupProductive(idGroup){
+      if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+      }
       const name = document.getElementById("groupName").value;
       const minProduction = document.getElementById("minProduction").value;
       const maxProduction = document.getElementById("maxProduction").value;

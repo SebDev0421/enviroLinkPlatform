@@ -211,6 +211,7 @@ app.put('/addProductionGroup',async(req,res)=>{
 app.put('/consultProductionGroup',async(req,res)=>{
     const {idFarm} = req.body
     console.log("idFarm",req.body)
+
     res.json({groups:await ProductionGroups.find({farmId:idFarm})})
 })
 
@@ -280,6 +281,13 @@ app.put('/consultFoodLog',async(req,res)=>{
     console.log("idFarm",idFarm)
     res.json({logFood:await LogFood.find({dateLog: { $gte: new Date(dateConsult) , $lt: new Date(new Date(dateConsult).getTime() + 24 * 60 * 60 * 1000) }, })})
 
+})
+
+
+app.put('/consultFoodLogCow',async(req,res)=>{
+    const {tag} = req.body
+    console.log("tag:",tag)
+    res.json({logFood:await LogFood.find({tag:tag})})
 })
 
 

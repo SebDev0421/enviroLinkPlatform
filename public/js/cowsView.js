@@ -143,6 +143,13 @@ function logout(){
 
 // Abrir modal
   function openModal() {
+    //read permissions
+    const permissions = localStorage.getItem("Permissions");
+    console.log("Permissions:",permissions);
+    if (permissions !== "admin") {
+        alert("No tienes permisos para agregar una vaca.");
+        return;
+    }
     console.log("Abrir modal");
     document.getElementById('addCowModal').style.display = 'flex';
   }

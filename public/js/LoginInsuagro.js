@@ -20,9 +20,12 @@ async function login() {
         if(res.login == null){
             alert("Usuario o contraseña erroneos");
         }else{
+            console.log("Usuario logueado:",res.login);
             localStorage.setItem("idUser", res.login._id);
             localStorage.setItem("idFarm", res.login.idFarm);
+            localStorage.setItem("Permissions", res.login.Permissions);
             localStorage.setItem("session", "active");
+            
             if (localStorage.getItem("session") === "active") {
               window.location.href = "/insuagroApp/Dashboard";
             }

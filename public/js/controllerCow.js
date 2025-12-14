@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function getApiFoodLog(tag) {
-    await fetch("/CowFood/API/Cows/consultFoodLog", {
+    await fetch("/CowFood/API/Cows/consultFoodLogCow", {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -80,6 +80,8 @@ async function fetchCowData(tag) {
 
 //fetch groups productive
 async function getAPiGroupsProductive(){
+    const idFarm= localStorage.getItem("idFarm");
+    console.log("idFarm en groups productive:",idFarm);
     await fetch("/CowFood/API/Cows/consultProductionGroup",{
         method:'PUT',
         headers: {
@@ -284,6 +286,10 @@ function openTab(tabName) {
 
 // abrir modal para editar la vaca
 function openEditCowModal() {
+    if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+    }
     document.getElementById('editCowModal').style.display = 'flex';
 }
 // cerrar modal para editar la vaca
@@ -301,6 +307,10 @@ function closeEditCowModal() {
 
 
   function deleteCow() {
+    if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para editar una vaca.");
+        return;
+    }
     const cowId = new URLSearchParams(window.location.search).get('tag');
     if (confirm('¿Estás seguro de que deseas eliminar esta vaca?')) {
         fetch('/CowFood/API/Cows/deleteCow', {

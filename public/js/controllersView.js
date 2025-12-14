@@ -76,6 +76,10 @@ function logout(){
 }
 
 function openModal(serialController, timeMotor1,timeMotor1Off, pulsesKg1, timeMotor2,timeMotor2Off, pulsesKg2) {
+    if (localStorage.getItem("Permissions") !== "admin") {
+        alert("No tienes permisos para modificar un controlador.");
+        return;
+    }
     document.getElementById("modifyControllerModal").style.display = "block";
     document.getElementById("controllerSerial").textContent = serialController;
     document.getElementById("timeMotor1").value = timeMotor1;
