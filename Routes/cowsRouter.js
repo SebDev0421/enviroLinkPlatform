@@ -146,8 +146,27 @@ app.get('/cowFoodInformation',async(req,res)=>{
 
     console.log("logFoodToday",logFoodToday.length)
     
+    
     portionsRest = cowInfo.portionsPerDay - logFoodToday.length
     console.log("portionsRest",portionsRest)
+
+    //get last log food entry
+    const lastLogFood = logFoodToday[logFoodToday.length - 1];
+
+    const dateTimeLastLog = lastLogFood.dateLog;
+    console.log("dateTimeLastLog",dateTimeLastLog)
+
+    //if 1 hour has passed since last log food
+    if(lastLogFood){
+        const oneHourLater = new Date(dateTimeLastLog);
+        oneHourLater.setHours(oneHourLater.getHours() + 1);
+        console.log("oneHourLater",oneHourLater)
+        console.log("currentTime",todayLog)
+        if(todayLog < oneHourLater){
+            return res.status(400).json({status:400,cow: 'Debe esperar al menos una hora antes de agregar otra porción.'});
+        }
+    }
+
     
     if(portionsRest > 0){
         //add to logFood the portion per day to mongo
