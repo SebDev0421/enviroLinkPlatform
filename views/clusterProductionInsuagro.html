@@ -98,7 +98,7 @@
         <li><a href="dashboard">🐄 Mis Vacas</a></li>
         <li class="gruposdeproduccion"><a href="#">👥 Grupos de Producción</a></li>
         <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
-        <li><a href="#">🏡 Registro de la Finca</a></li>
+        <li><a href="Logs">🏡 Registro de la Finca</a></li>
         <li><a href="Dispositivos">🧠 Controladores</a></li>
       </ul>
     </nav>
@@ -143,13 +143,61 @@
 
   <!-- manejo de modales -->
    <script src="/js/sessionController.js"></script>
-  <script src="/js/groupsController.js"></script>
+  
   <script>
     // Funciones para manejar los modales
+
+    let editingGroupId = null; // Variable para almacenar el ID del grupo que se está editando
+
     function openGroupModal() {
       document.getElementById('groupModal').style.display = 'block';
       document.getElementById('modalGroupTitle').textContent = 'Nuevo Grupo de Producción';
       document.getElementById('groupForm').reset();
+    }
+
+    function openGroupModalEdit(idGroup, name, minProduction, maxProduction, portion) {
+
+
+      document.getElementById('groupModal').style.display = 'block';
+      document.getElementById('modalGroupTitle').textContent = 'Editar Grupo de Producción';
+      document.getElementById('groupForm').reset();
+      console.log("Editar grupo de producción:"+ idGroup);
+      
+      editingGroupId = idGroup; // Almacenar el ID del grupo que se está editando
+
+      document.getElementById("groupName").value = name;
+      document.getElementById("minProduction").value = minProduction;
+      document.getElementById("maxProduction").value = maxProduction;
+      document.getElementById("portion").value = portion;
+
+    }
+
+    async function deleteGroup(idGroup){
+      console.log("Eliminar grupo de producción:"+ idGroup);
+      // Aquí iría la lógica para eliminar el grupo
+      await fetch("/CowFood/API/Cows/deleteProductionGroup",{
+              method:'DELETE',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  idGroup,
+                  farmId: localStorage.getItem("idFarm")
+              })
+          }).then((res=>res.json()))
+          .then((res)=>{
+              console.log(res)
+              if(res.status === 200){
+                  alert("Grupo de producción eliminado exitosamente.");
+                  getAPiGroupsProductive(); // Refresh the groups list
+              }else{
+              alert("Error al eliminar el grupo de producción: " + res.msg);
+              }
+          })
+          .catch((err)=>{
+              console.log(err)
+              alert("Error al eliminar el grupo de producción.");
+          })
     }
     
     function closeGroupModal() {
@@ -202,7 +250,43 @@
         document.getElementById("minProduction").value = "";
         document.getElementById("maxProduction").value = "";
         document.getElementById("portion").value = "";
-    }   
+    }
+
+    async function editGroupProductive(idGroup){
+      const name = document.getElementById("groupName").value;
+      const minProduction = document.getElementById("minProduction").value;
+      const maxProduction = document.getElementById("maxProduction").value;
+      const portion = document.getElementById("portion").value;   
+      const farmId = localStorage.getItem("idFarm");
+      // fetch to edit group
+      await fetch("/CowFood/API/Cows/editProductionGroup",{
+              method:'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  idGroup,
+                  name,
+                  farmId,
+                  minProduction,
+                  maxProduction,
+                  food: portion // Asignar la porción al campo food
+              })
+          }).then((res=>res.json()))
+          .then((res)=>{
+              console.log(res)
+              if(res.status === 200){
+                  alert("Grupo de producción editado exitosamente.");
+                  getAPiGroupsProductive(); // Refresh the groups list
+              }else{
+              alert("Error al editar el grupo de producción: " + res.msg);
+              }
+          })
+          .catch((err)=>{
+              console.log(err)
+              alert("Error al editar el grupo de producción.");
+          })
+      }
 
 
     document.getElementById('groupForm').addEventListener('submit', function(e) {
@@ -216,15 +300,26 @@
       }
 
       console.log("Peticion para agregar grupo de producción");
-      addGroupProductive();
+      
+      if (editingGroupId) {
+        // Si estamos editando un grupo existente
+        editGroupProductive(editingGroupId);
+        editingGroupId = null; // Resetear la variable después de editar
+      } else {
+        // Si estamos creando un nuevo grupo
+        addGroupProductive();
+      }
       closeGroupModal();
       // Actualizar la lista de grupos
     });
     // Simulación de datos (en un caso real, esto vendría de tu API)
     document.addEventListener('DOMContentLoaded', function() {
       // Aquí podrías cargar los grupos existentes desde tu backend
-      document.getElementById('farmName').textContent = 'Finca La Esperanza';
+      const farmName = localStorage.getItem("farmName");
+
+      document.getElementById("farmName").innerHTML = farmName;
     });
   </script>
+  <script src="/js/groupsController.js"></script>
 </body>
 </html>

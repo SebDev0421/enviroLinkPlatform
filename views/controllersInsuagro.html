@@ -35,10 +35,10 @@
         </div>
       <ul>
         <li><a href="dashboard">🐄 Mis Vacas</a></li>
-        <li><a href="#">👥 Grupos de Producción</a></li>
+        <li class="gruposdeproduccion"><a href="#">👥 Grupos de Producción</a></li>
         <li><a href="listadevacas">📋 Lista de Alimentación</a></li>
-        <li><a href="#">🏡 Registro de la Finca</a></li>
-        <li><a href="#">🧠 Controladores</a></li>
+        <li><a href="Logs">🏡 Registro de la Finca</a></li>
+        <li><a href="Dispositivos">🧠 Controladores</a></li>
       </ul>
     </nav>
 
@@ -80,6 +80,15 @@
       </div>
       </main>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Aquí podrías cargar los grupos existentes desde tu backend
+      const farmName = localStorage.getItem("farmName");
+
+      document.getElementById("farmName").innerHTML = farmName;
+    });
+</script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/js/controllersView.js"></script>
 

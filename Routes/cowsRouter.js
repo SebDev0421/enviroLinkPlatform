@@ -110,12 +110,29 @@ app.delete('/deleteCow',async(req,res)=>{
 })
 
 app.get('/cowFoodInformation',async(req,res)=>{
-    const {idCow,idFarm} = req.query
-    console.log(idCow)
+    const {idCow,idFarm,motorStation,idController} = req.query
+    console.log(idCow,motorStation,idController)
     //consult all log food today and compare with portion per day
-    const today = new Date();
+
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+    console.log("formattedDate",formattedDate)
+
+    const UTCColombia = formattedDate.replace(' ', 'T') + 'Z';
+    const todayLog = new Date(UTCColombia);
+    const today = new Date(UTCColombia);
+    console.log("today",today)
     today.setHours(0, 0, 0, 0); // Establecer la hora a medianoche para comparar solo la fecha
     const cowInfo = await CowsInformation.findOne({tag:idCow});
+
+    //consult all log food today
     const logFoodToday = await LogFood.find({
         tag: idCow,
         dateLog: {
@@ -136,9 +153,11 @@ app.get('/cowFoodInformation',async(req,res)=>{
         //add to logFood the portion per day to mongo
         await LogFood.create({
             tag: idCow,
-            farmId: idFarm,
-            dateLog: new Date()
-        });
+            motorStation: motorStation,
+            controllerId: idController,
+            port: motorStation.toString(),
+            dateLog: todayLog
+        })
         res.json({status:201,cow:cowInfo})
     }else{
         return res.status(400).json({status:400,cow: 'No se puede agregar más porciones hoy.'});
@@ -176,10 +195,72 @@ app.put('/consultProductionGroup',async(req,res)=>{
     res.json({groups:await ProductionGroups.find({farmId:idFarm})})
 })
 
+app.put('/editProductionGroup',async(req,res)=>{
+    const {idGroup,name,farmId,minProduction,maxProduction,food} = req.body
+    console.log("idGroup",idGroup)
+    //verificar si el rango de producción no se solapa con otros grupos existentes
+    const overlappingGroups = await ProductionGroups.find({
+    farmId,
+    _id: { $ne: idGroup }, // Excluir el grupo que se está editando
+    $or: [
+      { minProduction: { $lte: maxProduction }, maxProduction: { $gte: minProduction } }, // Solapamiento parcial
+      { minProduction: { $gte: minProduction }, maxProduction: { $lte: maxProduction } }, // Nuevo rango contiene uno existente
+    ],
+  });
+    console.log(overlappingGroups.length); // Si no hay coincidencias, se puede editar
+    if (overlappingGroups.length > 0) {
+        return res.status(400).json({ msg: 'El rango de producción se solapa con otro grupo existente.' });
+    }else{
+        await ProductionGroups.findOneAndUpdate(
+            {_id:idGroup,farmId:farmId},
+            {name:name,minProduction:minProduction,maxProduction:maxProduction,food:food},
+            {new:true}
+        ).then(async(obj)=>{
+            console.log(obj)
+            if(obj==null){
+                res.json({msg:"El grupo de producción no existe en el registro",status:201})
+            }else{
+                //update all cows with idGroup
+                await CowsInformation.updateMany(
+                    {idGroup:idGroup,farmId:farmId},
+                    {nameGroup:name,food:food}
+                )
+                res.json({msg:"El grupo de producción fue editado correctamente",status:200,cow:obj})
+            }
+        }).catch((err)=>{
+            console.log(err)
+            res.json({msg:"Error al editar el grupo de producción",status:500})
+        })
+    }
+})
+
+app.delete('/deleteProductionGroup',async(req,res)=>{
+    const {idGroup,farmId} = req.body
+    console.log("idGroup",idGroup)
+    await ProductionGroups.findOneAndDelete({_id:idGroup,farmId:farmId}).then(async(obj)=>{
+        console.log(obj)
+        if(obj==null){
+            res.json({msg:"El grupo de producción no existe en el registro",status:201})
+        }else{
+            //update all cows with idGroup to set idGroup to ""
+            await CowsInformation.updateMany(
+                {idGroup:idGroup,farmId:farmId},
+                {idGroup:"",nameGroup:"",food:0}
+            )
+            res.json({msg:"El grupo de producción fue eliminado correctamente",status:200})
+        }
+    }).catch((err)=>{
+        console.log(err)
+        res.json({msg:"Error al eliminar el grupo de producción",status:500})
+    }
+)
+})
+
 app.put('/consultFoodLog',async(req,res)=>{
-    const {tag} = req.body
-    console.log("idFarm",req.body)
-    res.json({logFood:await LogFood.find({tag:tag})})
+    const {idFarm,dateConsult} = req.body
+    console.log("idFarm",idFarm)
+    res.json({logFood:await LogFood.find({dateLog: { $gte: new Date(dateConsult) , $lt: new Date(new Date(dateConsult).getTime() + 24 * 60 * 60 * 1000) }, })})
+
 })
 
 

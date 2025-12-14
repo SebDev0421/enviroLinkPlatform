@@ -4,6 +4,8 @@ const mongoose = require('mongoose'),
       Schema = mongoose.Schema,
       DeviceControllerSchema = new Schema({
           idController: String,
+          nameController:String,
+          ipAddress:String,
           timeMotor1:{type:Number,default:1.0},
           timeMotor2:{type:Number,default:1.0},
           timeMotor1Off:{type:Number,default:1.0},

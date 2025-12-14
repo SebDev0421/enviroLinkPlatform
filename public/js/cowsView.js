@@ -12,6 +12,7 @@ const idFarm = localStorage.getItem("idFarm");
 
 
 
+
 console.log(userId)
 console.log(idFarm)
 
@@ -50,7 +51,9 @@ async function getAPiFarm(){
     .then((res)=>{
 
         console.log(res.farm)
+        localStorage.setItem("farmName", res.farm.name);
         document.getElementById("farmName").innerHTML = res.farm.name
+    
         //document.getElementById("farmLocation").innerHTML = res.farm.location
 
     })

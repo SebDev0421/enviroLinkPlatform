@@ -1,3 +1,5 @@
+
+
 //fetch groups productive get
 async function getAPiGroupsProductive(){
     await fetch("/CowFood/API/Cows/consultProductionGroup",{
@@ -27,8 +29,10 @@ async function getAPiGroupsProductive(){
               <strong>Cantidad de porcion:</strong> ${groups.food}(Kg)
             </div>
             <div class="group-actions">
-              <button class="action-btn edit-btn">Editar</button>
-              <button class="action-btn delete-btn">Eliminar</button>
+              <button class="action-btn edit-btn" onclick='
+               openGroupModalEdit("${groups._id}","${groups.name}",${groups.minProduction},${groups.maxProduction},${groups.food});
+              '>Editar</button>
+              <button class="action-btn delete-btn" onclick='deleteGroup("${groups._id}")'>Eliminar</button>
             </div>
           </div>
             `  

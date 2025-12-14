@@ -69,6 +69,7 @@ function logout(){
     localStorage.setItem("session","");
     localStorage.setItem("idUser", "");
     localStorage.setItem("idFarm", "");
+    localStorage.setItem("farmName", "");
     if (localStorage.getItem("session") !== "active") {
         window.location.href = "/insuagroApp/Login";
     } 

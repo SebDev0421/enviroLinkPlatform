@@ -137,6 +137,10 @@ app.get('/insuagroApp/Dispositivos',(req,res)=>{
     res.sendFile(path.join(__dirname, 'views', 'controllersInsuagro.html'));
 })
 
+app.get('/insuagroApp/Logs',(req,res)=>{
+    res.sendFile(path.join(__dirname, 'views', 'logsCowFood.html'));
+})
+
 app.get('/insuagroApp/Vaca',(req,res)=>{
     res.sendFile(path.join(__dirname, 'views', 'cowViewDetailed.html'));
     // Aquí podrías enviar el tag a la vista si es necesario

@@ -4,8 +4,9 @@ const mongoose = require('mongoose'),
       Schema = mongoose.Schema,
       LogFoodSchema = new Schema({
           tag: {type:String},
-          farmId: {type:String},
-          dateLog:{type:Date}
+          dateLog:{type:Date},
+          controllerId:{type:String},
+          port:{type:Number}
       },{
           collection:"logFood"
       }),
