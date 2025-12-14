@@ -118,6 +118,13 @@ document.getElementById('feedingDate').addEventListener('change', (e) => {
 
         console.log(res.logFood)
         document.getElementById("selectedDateDisplay").innerHTML = res.logFood.length.toString();
+        let html = ""
+        res.logFood.forEach(log => {
+            html += `
+            <li>Tag: ${log.tag} - Fecha y hora: ${log.dateLog} - Controlador: ${log.controllerId} - Puerto: ${log.port}</li>
+            `  
+        })
+        document.getElementById("cowList").innerHTML = html
     }).catch((err)=>{
         console.log(err)
     });
