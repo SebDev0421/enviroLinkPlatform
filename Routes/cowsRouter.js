@@ -152,12 +152,13 @@ app.get('/cowFoodInformation',async(req,res)=>{
 
     //get last log food entry
     const lastLogFood = logFoodToday[logFoodToday.length - 1];
-
-    const dateTimeLastLog = lastLogFood.dateLog;
-    console.log("dateTimeLastLog",dateTimeLastLog)
+    
+    
 
     //if 1 hour has passed since last log food
     if(lastLogFood){
+        const dateTimeLastLog = lastLogFood.dateLog;
+        console.log("dateTimeLastLog",dateTimeLastLog)
         const oneHourLater = new Date(dateTimeLastLog);
         oneHourLater.setHours(oneHourLater.getHours() + 1);
         console.log("oneHourLater",oneHourLater)
